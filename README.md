@@ -68,6 +68,20 @@ The website focuses heavily on smooth interactions, responsive layouts, premium 
 
 ---
 
+## Preview
+<p align="center">
+  <img src="./public/1.png" alt="Home UI" width="720" />
+</p>
+
+<p align="center">
+  <img src="./public/2.png" alt="Home UI" width="720" />
+</p>
+
+<p align="center">
+  <img src="./public/3.png" alt="Home UI" width="720" />
+</p>
+
+
 # 📂 Project Structure
 
 ```bash
@@ -206,7 +220,7 @@ Planned updates include:
 
 ## LinkedIn
 
-Add your LinkedIn profile here
+[https://www.linkedin.com/in/zaidsaifiai/](https://www.linkedin.com/in/zaidsaifiai/)
 
 ---
 
