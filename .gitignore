@@ -7,3 +7,4 @@ backend/.env
 dist/
 *.zip
 node_modules
+.components-git-backup/
