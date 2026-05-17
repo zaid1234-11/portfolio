@@ -10,21 +10,21 @@ export type ContactLink = {
 export const getContactLinks = (): ContactLink[] => [
   {
     label: "Email",
-    value: "zaidsaifi.work@gmail.com",
-    href: "mailto:zaidsaifi.work@gmail.com",
+    value: "zaidsaifi150105@gmail.com",
+    href: "mailto:zaidsaifi150105@gmail.com",
     icon: "mail",
   },
   {
     label: "Instagram",
-    value: "@your_instagram",
-    href: "https://instagram.com/your_instagram",
+    value: "@__zaidsaifi__",
+    href: "https://instagram.com/__zaidsaifi__",
     icon: "instagram",
     external: true,
   },
   {
     label: "WhatsApp",
-    value: "+91-00000-00000",
-    href: "https://wa.me/910000000000",
+    value: "+91 9899582824",
+    href: "https://wa.me/919899582824",
     icon: "whatsapp",
     external: true,
   },
