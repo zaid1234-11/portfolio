@@ -3,6 +3,7 @@ import { Play, ArrowDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import Parallax from "./ui/Parallax";
 import TextPressure from "./ui/TextPressure";
+import GradualBlur from "./ui/GradualBlur";
 
 const HeroSection = () => {
   const scrollToWork = () => {
@@ -169,6 +170,18 @@ const HeroSection = () => {
           <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5" />
         </motion.div>
       </motion.button>
+
+      {/* Gradual Blur Bottom Fade */}
+      <GradualBlur
+        target="parent"
+        position="bottom"
+        height="8rem"
+        strength={2.5}
+        divCount={8}
+        curve="bezier"
+        exponential
+        opacity={1}
+      />
     </section>
   );
 };

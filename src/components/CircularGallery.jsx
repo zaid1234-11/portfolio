@@ -408,11 +408,20 @@ class Media {
         this.plane.program.uniforms.uViewportSizes.value = [this.viewport.width, this.viewport.height];
       }
     }
-    this.scale = this.screen.height / 1500;
-    this.plane.scale.y = (this.viewport.height * (900 * this.scale)) / this.screen.height;
-    this.plane.scale.x = (this.viewport.width * (700 * this.scale)) / this.screen.width;
+    
+    const isMobile = this.screen.width < 768;
+    if (isMobile) {
+      this.plane.scale.x = this.viewport.width * 0.65;
+      this.plane.scale.y = Math.min(this.plane.scale.x * 1.5, this.viewport.height * 0.6);
+      this.padding = 0.8;
+    } else {
+      this.scale = this.screen.height / 1500;
+      this.plane.scale.y = (this.viewport.height * (900 * this.scale)) / this.screen.height;
+      this.plane.scale.x = (this.viewport.width * (700 * this.scale)) / this.screen.width;
+      this.padding = 2;
+    }
+
     this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
-    this.padding = 2;
     this.width = this.plane.scale.x + this.padding;
     this.widthTotal = this.width * this.length;
     this.x = this.width * this.index;
@@ -453,7 +462,7 @@ class App {
     this.renderer = new Renderer({
       alpha: true,
       antialias: true,
-      dpr: Math.min(window.devicePixelRatio || 1, 2)
+      dpr: window.devicePixelRatio || 1 // Use native device pixel ratio for maximum clarity
     });
     this.gl = this.renderer.gl;
     this.gl.clearColor(0, 0, 0, 0);

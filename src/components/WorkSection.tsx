@@ -15,6 +15,13 @@ const videoRows = [
     speed: 80,
     videos: [
       {
+        id: "v12",
+        videoUrl: "v12.mp4",
+        youtubeUrl: "https://www.youtube.com/embed/_GCL3ZrzCQM",
+        title: "YouTube Short",
+        category: "Creative",
+      },
+      {
         id: "v1",
         videoUrl: "v1.mp4",
         youtubeUrl: "https://www.youtube.com/embed/fIPAKrPEfeg",
