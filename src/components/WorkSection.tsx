@@ -113,6 +113,7 @@ const WorkSection = () => {
   const allVideos = videoRows.flatMap((row) => row.videos).map((video) => ({
     image: video.videoUrl,
     text: video.title,
+    video: video,
   }));
 
   return (
@@ -173,6 +174,11 @@ const WorkSection = () => {
                 scrollEase={0.05}
                 font="bold 24px sans-serif"
                 scrollSpeed={2}
+                onItemClick={(item: any) => {
+                  if (item && item.video) {
+                    handleVideoClick(item.video);
+                  }
+                }}
               />
             </div>
           </Suspense>

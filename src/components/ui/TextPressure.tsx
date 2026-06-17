@@ -108,7 +108,9 @@ const TextPressure = ({
 
     const { width: containerW, height: containerH } = containerRef.current.getBoundingClientRect();
 
-    let newFontSize = containerW / (chars.length / 2);
+    const fontSizeH = containerW / (chars.length * 0.65);
+    const fontSizeV = containerH > 10 ? containerH / 1.15 : fontSizeH;
+    let newFontSize = Math.min(fontSizeH, fontSizeV);
     newFontSize = Math.max(newFontSize, minFontSize);
 
     setFontSize(newFontSize);
@@ -155,14 +157,16 @@ const TextPressure = ({
 
           const d = dist(mouseRef.current, charCenter);
 
-          const wdth = width ? Math.floor(getAttr(d, maxDist, 5, 200)) : 100;
-          const wght = weight ? Math.floor(getAttr(d, maxDist, 100, 900)) : 400;
+          const wdth = width ? Math.floor(getAttr(d, maxDist, 75, 125)) : 100;
+          const wght = weight ? Math.floor(getAttr(d, maxDist, 300, 600)) : 400;
           const italVal = italic ? getAttr(d, maxDist, 0, 1).toFixed(2) : '0';
           const alphaVal = alpha ? getAttr(d, maxDist, 0, 1).toFixed(2) : '1';
 
           const newFontVariationSettings = `'wght' ${wght}, 'wdth' ${wdth}, 'ital' ${italVal}`;
 
-          span.style.setProperty('font-variation-settings', newFontVariationSettings);
+          if (span.style.fontVariationSettings !== newFontVariationSettings) {
+            span.style.fontVariationSettings = newFontVariationSettings;
+          }
           if (alpha) {
             span.style.opacity = alphaVal;
           }

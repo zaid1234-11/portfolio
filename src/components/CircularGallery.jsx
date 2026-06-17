@@ -1,4 +1,4 @@
-import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from 'ogl';
+import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform, Raycast } from 'ogl';
 import { useEffect, useRef } from 'react';
 
 function debounce(func, wait) {
@@ -20,6 +20,16 @@ function autoBind(instance) {
       instance[key] = instance[key].bind(instance);
     }
   });
+}
+
+function getClientCoords(e) {
+  if (e.touches && e.touches.length > 0) {
+    return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  }
+  if (e.changedTouches && e.changedTouches.length > 0) {
+    return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+  }
+  return { x: e.clientX, y: e.clientY };
 }
 
 const DEFAULT_FONT = 'bold 30px Figtree';
@@ -415,13 +425,15 @@ class App {
       borderRadius = 0,
       font = 'bold 30px Figtree',
       scrollSpeed = 2,
-      scrollEase = 0.05
+      scrollEase = 0.05,
+      onItemClick
     } = {}
   ) {
     document.documentElement.classList.remove('no-js');
     this.container = container;
     this.scrollSpeed = scrollSpeed;
     this.scroll = { ease: scrollEase, current: 0, target: 0, last: 0 };
+    this.onItemClick = onItemClick;
     this.onCheckDebounce = debounce(this.onCheck, 200);
     this.createRenderer();
     this.createCamera();
@@ -431,6 +443,7 @@ class App {
     this.createMedias(items, bend, textColor, borderRadius, font);
     this.update();
     this.addEventListeners();
+    this.container.style.cursor = 'grab';
   }
   createRenderer() {
     this.renderer = new Renderer({
@@ -495,17 +508,73 @@ class App {
   onTouchDown(e) {
     this.isDown = true;
     this.scroll.position = this.scroll.current;
-    this.start = e.touches ? e.touches[0].clientX : e.clientX;
+    const coords = getClientCoords(e);
+    this.start = coords.x;
+    this.startY = coords.y;
+    this.startTime = Date.now();
+    this.container.style.cursor = 'grabbing';
   }
   onTouchMove(e) {
-    if (!this.isDown) return;
-    const x = e.touches ? e.touches[0].clientX : e.clientX;
-    const distance = (this.start - x) * (this.scrollSpeed * 0.025);
-    this.scroll.target = this.scroll.position + distance;
+    const coords = getClientCoords(e);
+    if (this.isDown) {
+      const distance = (this.start - coords.x) * (this.scrollSpeed * 0.025);
+      this.scroll.target = this.scroll.position + distance;
+      this.container.style.cursor = 'grabbing';
+    } else {
+      if (!this.raycast) {
+        this.raycast = new Raycast(this.gl);
+      }
+      const rect = this.gl.canvas.getBoundingClientRect();
+      const x = ((coords.x - rect.left) / rect.width) * 2 - 1;
+      const y = -((coords.y - rect.top) / rect.height) * 2 + 1;
+      this.raycast.castMouse(this.camera, { x, y });
+      
+      const meshes = this.medias.map(m => m.plane);
+      const hits = this.raycast.intersectBounds(meshes);
+      if (hits.length > 0) {
+        this.container.style.cursor = 'pointer';
+      } else {
+        this.container.style.cursor = 'grab';
+      }
+    }
   }
-  onTouchUp() {
+  onTouchUp(e) {
     this.isDown = false;
     this.onCheck();
+    this.container.style.cursor = 'grab';
+    
+    if (e && this.start !== undefined && this.startY !== undefined && this.startTime !== undefined) {
+      const coords = getClientCoords(e);
+      const dx = Math.abs(coords.x - this.start);
+      const dy = Math.abs(coords.y - this.startY);
+      const dt = Date.now() - this.startTime;
+      if (dx < 10 && dy < 10 && dt < 300) {
+        this.handleClick(coords.x, coords.y);
+      }
+    }
+  }
+  handleClick(clientX, clientY) {
+    if (!this.raycast) {
+      this.raycast = new Raycast(this.gl);
+    }
+    const rect = this.gl.canvas.getBoundingClientRect();
+    const x = ((clientX - rect.left) / rect.width) * 2 - 1;
+    const y = -((clientY - rect.top) / rect.height) * 2 + 1;
+    
+    this.raycast.castMouse(this.camera, { x, y });
+    
+    const meshes = this.medias.map(m => m.plane);
+    const hits = this.raycast.intersectBounds(meshes);
+    if (hits.length > 0) {
+      const clickedMesh = hits[0];
+      const clickedMediaIndex = this.medias.findIndex(m => m.plane === clickedMesh);
+      if (clickedMediaIndex !== -1) {
+        const clickedItem = this.mediasImages[clickedMediaIndex];
+        if (this.onItemClick) {
+          this.onItemClick(clickedItem, clickedMediaIndex);
+        }
+      }
+    }
   }
   onWheel(e) {
     const delta = e.deltaY || e.wheelDelta || e.detail;
@@ -610,7 +679,8 @@ export default function CircularGallery({
   font = 'bold 30px Figtree',
   fontUrl,
   scrollSpeed = 2,
-  scrollEase = 0.05
+  scrollEase = 0.05,
+  onItemClick
 }) {
   const containerRef = useRef(null);
   useEffect(() => {
@@ -626,14 +696,15 @@ export default function CircularGallery({
         borderRadius,
         font: resolvedFont,
         scrollSpeed,
-        scrollEase
+        scrollEase,
+        onItemClick
       });
     });
     return () => {
       isMounted = false;
       if (app) app.destroy();
     };
-  }, [items, bend, textColor, borderRadius, font, fontUrl, scrollSpeed, scrollEase]);
+  }, [items, bend, textColor, borderRadius, font, fontUrl, scrollSpeed, scrollEase, onItemClick]);
   return (
     <div
       className="w-full h-full overflow-hidden cursor-grab active:cursor-grabbing focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
