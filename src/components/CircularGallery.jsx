@@ -242,7 +242,11 @@ class Media {
   }
   createShader() {
     const texture = new Texture(this.gl, {
-      generateMipmaps: true
+      generateMipmaps: false,
+      minFilter: this.gl.LINEAR,
+      magFilter: this.gl.LINEAR,
+      wrapS: this.gl.CLAMP_TO_EDGE,
+      wrapT: this.gl.CLAMP_TO_EDGE
     });
     this.program = new Program(this.gl, {
       depthTest: false,
@@ -269,6 +273,7 @@ class Media {
         uniform vec2 uPlaneSizes;
         uniform sampler2D tMap;
         uniform float uBorderRadius;
+        uniform float uTime;
         varying vec2 vUv;
         
         float roundedBoxSDF(vec2 p, vec2 b, float r) {
@@ -287,13 +292,49 @@ class Media {
           );
           vec4 color = texture2D(tMap, uv);
           
-          float d = roundedBoxSDF(vUv - 0.5, vec2(0.5 - uBorderRadius), uBorderRadius);
+          // Outer glow margin
+          float margin = 0.05;
+          float r = uBorderRadius;
+          vec2 cardSize = vec2(0.5 - margin);
+          float d = roundedBoxSDF(vUv - 0.5, cardSize - r, r);
           
-          // Smooth antialiasing for edges
-          float edgeSmooth = 0.002;
-          float alpha = 1.0 - smoothstep(-edgeSmooth, edgeSmooth, d);
+          // Card face mask
+          float faceAlpha = 1.0 - smoothstep(-0.002, 0.002, d);
           
-          gl_FragColor = vec4(color.rgb, alpha);
+          // Border glow colors matching the user's BorderGlow spec
+          vec3 c1 = vec3(0.75, 0.52, 0.99); // purple #c084fc
+          vec3 c2 = vec3(0.96, 0.45, 0.71); // pink #f472b6
+          vec3 c3 = vec3(0.22, 0.74, 0.97); // blue #38bdf8
+          
+          // Animate gradient colors dynamically
+          float mixVal1 = sin(vUv.x * 3.14 + uTime * 2.0) * 0.5 + 0.5;
+          float mixVal2 = cos(vUv.y * 3.14 + uTime * 1.5) * 0.5 + 0.5;
+          vec3 glowColor = mix(mix(c1, c2, mixVal1), c3, mixVal2);
+          
+          // Border thickness
+          float borderThickness = 0.008;
+          float borderMask = smoothstep(-borderThickness - 0.002, -borderThickness, d) * (1.0 - smoothstep(-0.002, 0.002, d));
+          
+          // Outer neon glow fading to transparency
+          float outerGlowMask = 0.0;
+          if (d > 0.0) {
+            outerGlowMask = 1.0 - smoothstep(0.0, margin, d);
+            outerGlowMask = pow(outerGlowMask, 2.5);
+          }
+          
+          vec3 finalColor = color.rgb;
+          float finalAlpha = faceAlpha;
+          
+          // Combine inner neon border
+          finalColor = mix(finalColor, glowColor, borderMask * 0.9);
+          
+          // Combine outer neon glow
+          if (d > 0.0) {
+            finalColor = glowColor;
+            finalAlpha = outerGlowMask * 0.7;
+          }
+          
+          gl_FragColor = vec4(finalColor, finalAlpha);
         }
       `,
       uniforms: {
