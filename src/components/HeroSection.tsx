@@ -84,7 +84,7 @@ const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <div className="relative h-[45px] sm:h-[65px] md:h-[85px] lg:h-[105px] xl:h-[125px] w-full overflow-hidden flex items-center justify-center">
+              <div className="relative h-[80px] sm:h-[100px] md:h-[130px] lg:h-[160px] xl:h-[190px] w-full flex items-center justify-center">
                 <TextPressure
                   text="CINEMATIC"
                   flex
@@ -94,10 +94,10 @@ const HeroSection = () => {
                   weight
                   italic
                   textColor="hsl(var(--foreground))"
-                  minFontSize={32}
+                  minFontSize={36}
                 />
               </div>
-              <div className="relative h-[35px] sm:h-[50px] md:h-[65px] lg:h-[80px] xl:h-[95px] w-full overflow-hidden flex items-center justify-center -mt-1 sm:-mt-2">
+              <div className="relative h-[60px] sm:h-[80px] md:h-[100px] lg:h-[120px] xl:h-[140px] w-full flex items-center justify-center -mt-2 sm:-mt-4">
                 <TextPressure
                   text="VIDEO EDITOR"
                   flex
@@ -107,7 +107,7 @@ const HeroSection = () => {
                   weight
                   italic
                   textColor="hsl(var(--primary))"
-                  minFontSize={24}
+                  minFontSize={28}
                 />
               </div>
               <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-gradient-accent mt-4">

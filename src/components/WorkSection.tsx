@@ -1,11 +1,12 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import ScrollingRow from "./ScrollingRow";
 import VideoModal from "./VideoModal";
 import AmbientBackground from "./AmbientBackground";
 import Parallax from "./ui/Parallax";
 import TextPressure from "./ui/TextPressure";
+
+const CircularGallery = lazy(() => import("./CircularGallery"));
 
 const videoRows = [
   {
@@ -109,6 +110,11 @@ const WorkSection = () => {
     });
   }, []);
 
+  const allVideos = videoRows.flatMap((row) => row.videos).map((video) => ({
+    image: video.videoUrl,
+    text: video.title,
+  }));
+
   return (
     <section id="work" className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
       <AmbientBackground />
@@ -126,7 +132,7 @@ const WorkSection = () => {
                 Featured Work
               </p>
               {/* Interactive Text Pressure Heading */}
-              <div className="relative h-[35px] sm:h-[45px] md:h-[60px] lg:h-[75px] w-full overflow-hidden flex items-center justify-center max-w-2xl mx-auto mb-1 sm:mb-2">
+              <div className="relative h-[60px] sm:h-[80px] md:h-[100px] lg:h-[120px] w-full flex items-center justify-center max-w-3xl mx-auto mb-2 sm:mb-4">
                 <TextPressure
                   text="CRAFTING VISUAL"
                   flex
@@ -136,10 +142,10 @@ const WorkSection = () => {
                   weight
                   italic
                   textColor="hsl(var(--foreground))"
-                  minFontSize={28}
+                  minFontSize={32}
                 />
               </div>
-              <div className="relative h-[25px] sm:h-[35px] md:h-[50px] lg:h-[65px] w-full overflow-hidden flex items-center justify-center max-w-2xl mx-auto">
+              <div className="relative h-[50px] sm:h-[70px] md:h-[90px] lg:h-[110px] w-full flex items-center justify-center max-w-3xl mx-auto -mt-2">
                 <TextPressure
                   text="STORIES"
                   flex
@@ -149,25 +155,27 @@ const WorkSection = () => {
                   weight
                   italic
                   textColor="hsl(var(--primary))"
-                  minFontSize={20}
+                  minFontSize={24}
                 />
               </div>
             </div>
           </motion.div>
         </Parallax>
 
-        <div className="space-y-4 md:space-y-6">
-          {videoRows.map((row, index) => (
-            <ScrollingRow
-              key={row.id}
-              videos={row.videos}
-              direction={row.direction}
-              speed={row.speed}
-              onVideoClick={handleVideoClick}
-              rowIndex={index}
-              totalRows={videoRows.length}
-            />
-          ))}
+        <div className="mt-8 md:mt-12 w-full max-w-[100vw] overflow-hidden">
+          <Suspense fallback={<div className="h-[400px] sm:h-[500px] md:h-[600px] flex items-center justify-center text-muted-foreground animate-pulse">Loading interactive gallery...</div>}>
+            <div className="relative h-[400px] sm:h-[500px] md:h-[600px] w-full">
+              <CircularGallery
+                items={allVideos}
+                bend={3}
+                textColor="#ffffff"
+                borderRadius={0.05}
+                scrollEase={0.05}
+                font="bold 24px sans-serif"
+                scrollSpeed={2}
+              />
+            </div>
+          </Suspense>
         </div>
 
         <div className="flex justify-center mt-12">
