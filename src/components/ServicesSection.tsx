@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Film, Youtube, Plane, Megaphone, Sparkles } from "lucide-react";
 import Parallax from "./ui/Parallax";
-import BorderGlow from "./ui/BorderGlow";
 
 const services = [
   {
@@ -91,36 +90,21 @@ const ServicesSection = () => {
           {services.map((service, index) => (
             <motion.div
               key={service.title}
+              className="group glass-card p-5 sm:p-6 md:p-8 transition-all duration-500 hover:scale-[1.02]"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="w-full h-full"
             >
-              <BorderGlow
-                edgeSensitivity={20}
-                glowColor="270 50% 60%"
-                backgroundColor="hsl(var(--card) / 0.5)"
-                borderRadius={16}
-                glowRadius={40}
-                glowIntensity={1.2}
-                coneSpread={30}
-                animated
-                colors={['#c084fc', '#f472b6', '#38bdf8']}
-                className="w-full h-full group"
-              >
-                <div className="p-5 sm:p-6 md:p-8 flex flex-col h-full">
-                  <div className="mb-4 sm:mb-6 inline-flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg sm:rounded-xl bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-glow">
-                    <service.icon className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-                  </div>
-                  <h3 className="text-base sm:text-lg md:text-xl font-semibold text-foreground mb-2 sm:mb-3 group-hover:text-primary transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                    {service.description}
-                  </p>
-                </div>
-              </BorderGlow>
+              <div className="mb-4 sm:mb-6 inline-flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg sm:rounded-xl bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-glow">
+                <service.icon className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+              </div>
+              <h3 className="text-base sm:text-lg md:text-xl font-semibold text-foreground mb-2 sm:mb-3 group-hover:text-primary transition-colors">
+                {service.title}
+              </h3>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                {service.description}
+              </p>
             </motion.div>
           ))}
         </div>
