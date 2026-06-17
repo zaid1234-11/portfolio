@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { Play, ArrowDown } from "lucide-react";
 import { Link } from "react-router-dom";
+import Parallax from "./ui/Parallax";
+import TextPressure from "./ui/TextPressure";
 
 const HeroSection = () => {
   const scrollToWork = () => {
@@ -10,110 +12,145 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Video */}
+      {/* Background Video with Parallax */}
       <div className="absolute inset-0 z-0">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          className="h-full w-full object-cover opacity-40"
-        >
-          <source
-            src="v1.mp4"
-            type="video/mp4"
-          />
-          Your browser does not support the video tag.
-        </video>
+        <Parallax offset={-80} className="h-full w-full">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="h-[120%] w-full object-cover opacity-40 -translate-y-[10%]"
+          >
+            <source
+              src="v1.mp4"
+              type="video/mp4"
+            />
+            Your browser does not support the video tag.
+          </video>
+        </Parallax>
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/50 via-transparent to-background/50" />
       </div>
 
-      {/* Ambient Glow Effects */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-1/3 left-1/4 w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[500px] md:h-[500px] rounded-full opacity-20"
-          style={{
-            background:
-              "radial-gradient(circle, hsl(var(--glow-primary) / 0.3) 0%, transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute bottom-1/4 right-1/3 w-[150px] h-[150px] sm:w-[250px] sm:h-[250px] md:w-[400px] md:h-[400px] rounded-full opacity-15"
-          style={{
-            background:
-              "radial-gradient(circle, hsl(var(--glow-secondary) / 0.2) 0%, transparent 70%)",
-          }}
-        />
+      {/* Ambient Glow Effects with Parallax */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <Parallax offset={100} className="absolute top-1/3 left-1/4">
+          <div
+            className="w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[500px] md:h-[500px] rounded-full opacity-20"
+            style={{
+              background:
+                "radial-gradient(circle, hsl(var(--glow-primary) / 0.3) 0%, transparent 70%)",
+            }}
+          />
+        </Parallax>
+        <Parallax offset={-60} className="absolute bottom-1/4 right-1/3">
+          <div
+            className="w-[150px] h-[150px] sm:w-[250px] sm:h-[250px] md:w-[400px] md:h-[400px] rounded-full opacity-15"
+            style={{
+              background:
+                "radial-gradient(circle, hsl(var(--glow-secondary) / 0.2) 0%, transparent 70%)",
+            }}
+          />
+        </Parallax>
       </div>
 
       {/* Content */}
-      <div className="relative z-10 px-4 sm:px-6 md:px-12 lg:px-20 text-center max-w-5xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
+      <div className="relative z-10 px-4 sm:px-6 md:px-12 lg:px-20 text-center max-w-5xl mx-auto w-full">
+        <Parallax offset={30}>
           <motion.div
-            className="inline-flex items-center gap-2 mb-4 sm:mb-6 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-border/50 bg-card/30 backdrop-blur-sm"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <Play className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary" />
-            <span className="text-[10px] sm:text-xs font-medium uppercase tracking-widest text-muted-foreground">
-              Video Editor & Motion Designer
-            </span>
-          </motion.div>
-
-          <motion.h1
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.15] mb-4 sm:mb-6"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <span className="text-foreground">Cinematic Video Editor</span>
-            <br />
-            <span className="text-gradient-accent">for Reels, YouTube & Brands</span>
-          </motion.h1>
-
-          <motion.p
-            className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 md:mb-10 px-2"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-          >
-            Transforming raw footage into compelling stories that captivate audiences 
-            and elevate brands through masterful editing and motion design.
-          </motion.p>
-
-          <motion.div
-            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-          >
-            <Link
-              to="/work"
-              className="group relative overflow-hidden rounded-full bg-primary px-6 sm:px-8 py-3 sm:py-4 text-xs sm:text-sm font-semibold uppercase tracking-widest text-primary-foreground transition-all hover:shadow-glow hover:scale-105 w-full sm:w-auto"
+            <motion.div
+              className="inline-flex items-center gap-2 mb-6 sm:mb-8 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-border/50 bg-card/30 backdrop-blur-sm"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                <Play className="w-3 h-3 sm:w-4 sm:h-4" />
-                View Work
+              <Play className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary" />
+              <span className="text-[10px] sm:text-xs font-medium uppercase tracking-widest text-muted-foreground">
+                Video Editor & Motion Designer
               </span>
-              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-            </Link>
+            </motion.div>
 
-            <Link
-              to="/contact"
-              className="group rounded-full border border-border bg-card/30 backdrop-blur-sm px-6 sm:px-8 py-3 sm:py-4 text-xs sm:text-sm font-semibold uppercase tracking-widest text-foreground transition-all hover:bg-card/50 hover:border-primary/50 w-full sm:w-auto text-center"
+            {/* Interactive Text Pressure Heading */}
+            <motion.div
+              className="mb-6 sm:mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
             >
-              Hire Me
-            </Link>
+              <div className="relative h-[45px] sm:h-[65px] md:h-[85px] lg:h-[105px] xl:h-[125px] w-full overflow-hidden flex items-center justify-center">
+                <TextPressure
+                  text="CINEMATIC"
+                  flex
+                  alpha={false}
+                  stroke={false}
+                  width
+                  weight
+                  italic
+                  textColor="hsl(var(--foreground))"
+                  minFontSize={32}
+                />
+              </div>
+              <div className="relative h-[35px] sm:h-[50px] md:h-[65px] lg:h-[80px] xl:h-[95px] w-full overflow-hidden flex items-center justify-center -mt-1 sm:-mt-2">
+                <TextPressure
+                  text="VIDEO EDITOR"
+                  flex
+                  alpha={false}
+                  stroke={false}
+                  width
+                  weight
+                  italic
+                  textColor="hsl(var(--primary))"
+                  minFontSize={24}
+                />
+              </div>
+              <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-gradient-accent mt-4">
+                for Reels, YouTube & Brands
+              </div>
+            </motion.div>
+
+            <motion.p
+              className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 md:mb-10 px-2 leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              Transforming raw footage into compelling stories that captivate audiences 
+              and elevate brands through masterful editing and motion design.
+            </motion.p>
+
+            <motion.div
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              <Link
+                to="/work"
+                className="group relative overflow-hidden rounded-full bg-primary px-6 sm:px-8 py-3 sm:py-4 text-xs sm:text-sm font-semibold uppercase tracking-widest text-primary-foreground transition-all hover:shadow-glow hover:scale-105 w-full sm:w-auto"
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  <Play className="w-3 h-3 sm:w-4 sm:h-4" />
+                  View Work
+                </span>
+                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+              </Link>
+
+              <Link
+                to="/contact"
+                className="group rounded-full border border-border bg-card/30 backdrop-blur-sm px-6 sm:px-8 py-3 sm:py-4 text-xs sm:text-sm font-semibold uppercase tracking-widest text-foreground transition-all hover:bg-card/50 hover:border-primary/50 w-full sm:w-auto text-center"
+              >
+                Hire Me
+              </Link>
+            </motion.div>
           </motion.div>
-        </motion.div>
+        </Parallax>
       </div>
 
       {/* Scroll Indicator */}

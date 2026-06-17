@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import ScrollingRow from "./ScrollingRow";
 import VideoModal from "./VideoModal";
 import AmbientBackground from "./AmbientBackground";
+import Parallax from "./ui/Parallax";
+import TextPressure from "./ui/TextPressure";
 
 const videoRows = [
   {
@@ -112,21 +114,47 @@ const WorkSection = () => {
       <AmbientBackground />
 
       <div className="relative z-10">
-        <motion.div
-          className="px-4 sm:px-6 pb-8 md:pb-12 md:px-12 lg:px-20"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="text-xs uppercase tracking-widest text-primary mb-3">
-              Featured Work
-            </p>
-            <h2 className="text-3xl md:text-5xl font-bold">
-              Crafting Visual <span className="text-gradient-accent">Stories</span>
-            </h2>
-          </div>
-        </motion.div>
+        <Parallax offset={25}>
+          <motion.div
+            className="px-4 sm:px-6 pb-8 md:pb-12 md:px-12 lg:px-20"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="max-w-4xl mx-auto text-center">
+              <p className="text-xs sm:text-sm uppercase tracking-widest text-primary mb-3 sm:mb-4">
+                Featured Work
+              </p>
+              {/* Interactive Text Pressure Heading */}
+              <div className="relative h-[35px] sm:h-[45px] md:h-[60px] lg:h-[75px] w-full overflow-hidden flex items-center justify-center max-w-2xl mx-auto mb-1 sm:mb-2">
+                <TextPressure
+                  text="CRAFTING VISUAL"
+                  flex
+                  alpha={false}
+                  stroke={false}
+                  width
+                  weight
+                  italic
+                  textColor="hsl(var(--foreground))"
+                  minFontSize={28}
+                />
+              </div>
+              <div className="relative h-[25px] sm:h-[35px] md:h-[50px] lg:h-[65px] w-full overflow-hidden flex items-center justify-center max-w-2xl mx-auto">
+                <TextPressure
+                  text="STORIES"
+                  flex
+                  alpha={false}
+                  stroke={false}
+                  width
+                  weight
+                  italic
+                  textColor="hsl(var(--primary))"
+                  minFontSize={20}
+                />
+              </div>
+            </div>
+          </motion.div>
+        </Parallax>
 
         <div className="space-y-4 md:space-y-6">
           {videoRows.map((row, index) => (
