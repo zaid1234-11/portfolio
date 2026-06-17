@@ -7,10 +7,12 @@ import SkillsSection from "@/components/SkillsSection";
 import StatsSection from "@/components/StatsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import GlobalBackground from "@/components/GlobalBackground";
 
 const Index = () => {
   return (
-    <main className="min-h-screen bg-background overflow-x-hidden">
+    <main className="min-h-screen bg-background overflow-x-hidden relative">
+      <GlobalBackground />
       <Navbar />
       <HeroSection />
       <WorkSection />

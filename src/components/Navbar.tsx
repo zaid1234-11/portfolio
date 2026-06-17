@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import GradualBlur from "./ui/GradualBlur";
 
 const navLinks = [
   { label: "Work", href: "#work", page: "/work" },
@@ -37,15 +36,6 @@ const Navbar = () => {
 
   return (
     <>
-      <GradualBlur
-        preset="page-header"
-        height="8rem"
-        strength={3}
-        opacity={isScrolled ? 1 : 0}
-        animated
-        duration="0.5s"
-        zIndex={40}
-      />
       <motion.nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
