@@ -206,6 +206,7 @@ class Media {
     geometry,
     gl,
     image,
+    videoElement,
     index,
     length,
     renderer,
@@ -222,6 +223,7 @@ class Media {
     this.geometry = geometry;
     this.gl = gl;
     this.image = image;
+    this.video = videoElement;
     this.index = index;
     this.length = length;
     this.renderer = renderer;
@@ -304,29 +306,19 @@ class Media {
       },
       transparent: true
     });
-    if (this.image && this.image.match(/\\.(mp4|webm)$/i)) {
-      const vid = document.createElement('video');
-      vid.crossOrigin = 'anonymous';
-      vid.src = this.image;
-      vid.muted = true;
-      vid.playsInline = true;
-      vid.preload = "auto";
-      
-      vid.addEventListener('loadeddata', () => {
-        vid.currentTime = 1.0; 
-      });
-      
-      vid.addEventListener('seeked', () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = vid.videoWidth || 800;
-        canvas.height = vid.videoHeight || 600;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(vid, 0, 0, canvas.width, canvas.height);
-        texture.image = canvas;
-        this.program.uniforms.uImageSizes.value = [canvas.width, canvas.height];
-        // Clean up
-        vid.removeAttribute('src');
-        vid.load();
+    if (this.video) {
+      if (this.video.videoWidth) {
+        texture.image = this.video;
+        this.program.uniforms.uImageSizes.value = [this.video.videoWidth, this.video.videoHeight];
+      } else {
+        this.video.addEventListener('loadedmetadata', () => {
+          texture.image = this.video;
+          this.program.uniforms.uImageSizes.value = [this.video.videoWidth, this.video.videoHeight];
+        });
+      }
+      this.video.addEventListener('loadeddata', () => {
+        texture.image = this.video;
+        this.program.uniforms.uImageSizes.value = [this.video.videoWidth, this.video.videoHeight];
       });
     } else {
       const img = new Image();
@@ -382,6 +374,14 @@ class Media {
     this.speed = scroll.current - scroll.last;
     this.program.uniforms.uTime.value += 0.04;
     this.program.uniforms.uSpeed.value = this.speed;
+
+    if (this.video && this.video.readyState >= this.video.HAVE_CURRENT_DATA) {
+      if (!this.program.uniforms.tMap.value.image) {
+        this.program.uniforms.tMap.value.image = this.video;
+        this.program.uniforms.uImageSizes.value = [this.video.videoWidth, this.video.videoHeight];
+      }
+      this.program.uniforms.tMap.value.needsUpdate = true;
+    }
 
     const planeOffset = this.plane.scale.x / 2;
     const viewportOffset = this.viewport.width / 2;
@@ -486,11 +486,35 @@ class App {
     ];
     const galleryItems = items && items.length ? items : defaultItems;
     this.mediasImages = galleryItems.concat(galleryItems);
+    
+    // Create shared video elements cache
+    this.videoElements = {};
+    galleryItems.forEach(item => {
+      const url = item.image;
+      if (url && url.match(/\.(mp4|webm)$/i) && !this.videoElements[url]) {
+        const vid = document.createElement('video');
+        vid.crossOrigin = 'anonymous';
+        vid.src = url;
+        vid.muted = true;
+        vid.playsInline = true;
+        vid.loop = true;
+        vid.autoplay = true;
+        vid.setAttribute('webkit-playsinline', 'webkit-playsinline');
+        vid.preload = "auto";
+        
+        // Start playing
+        vid.play().catch(err => console.warn("Video autoplay failed:", err));
+        this.videoElements[url] = vid;
+      }
+    });
+
     this.medias = this.mediasImages.map((data, index) => {
+      const sharedVideo = this.videoElements[data.image] || null;
       return new Media({
         geometry: this.planeGeometry,
         gl: this.gl,
         image: data.image,
+        videoElement: sharedVideo,
         index,
         length: this.mediasImages.length,
         renderer: this.renderer,
@@ -667,6 +691,17 @@ class App {
 
     if (this.container) {
       this.container.removeEventListener('keydown', this.boundOnKeyDown);
+    }
+
+    if (this.videoElements) {
+      Object.keys(this.videoElements).forEach(url => {
+        const vid = this.videoElements[url];
+        if (vid) {
+          vid.pause();
+          vid.removeAttribute('src');
+          vid.load();
+        }
+      });
     }
   }
 }
