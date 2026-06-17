@@ -5,6 +5,7 @@ import VideoModal from "./VideoModal";
 import AmbientBackground from "./AmbientBackground";
 import Parallax from "./ui/Parallax";
 import TextPressure from "./ui/TextPressure";
+import ScrollingRow from "./ScrollingRow";
 
 const CircularGallery = lazy(() => import("./CircularGallery"));
 
@@ -171,14 +172,27 @@ const WorkSection = () => {
         </Parallax>
 
         <div className="mt-8 md:mt-12 w-full max-w-[100vw] overflow-hidden">
-          <Suspense fallback={<div className="h-[400px] sm:h-[500px] md:h-[600px] flex items-center justify-center text-muted-foreground animate-pulse">Loading interactive gallery...</div>}>
-            <div className="relative h-[400px] sm:h-[500px] md:h-[600px] w-full">
+          {/* Mobile view: scrolling rows */}
+          <div className="block md:hidden space-y-6 sm:space-y-8">
+            {videoRows.map((row) => (
+              <ScrollingRow
+                key={row.id}
+                videos={row.videos}
+                direction={row.direction}
+                speed={row.speed}
+                onVideoClick={handleVideoClick}
+              />
+            ))}
+          </div>
+
+          {/* Desktop view: 3D circular gallery */}
+          <div className="hidden md:block relative h-[500px] lg:h-[600px] w-full">
+            <Suspense fallback={<div className="h-full flex items-center justify-center text-muted-foreground animate-pulse">Loading interactive gallery...</div>}>
               <CircularGallery
                 items={allVideos}
                 bend={3}
                 textColor="#ffffff"
                 borderRadius={0.05}
-                scrollEase={0.05}
                 font="bold 24px sans-serif"
                 scrollSpeed={2}
                 onItemClick={(item: any) => {
@@ -187,8 +201,8 @@ const WorkSection = () => {
                   }
                 }}
               />
-            </div>
-          </Suspense>
+            </Suspense>
+          </div>
         </div>
 
         <div className="flex justify-center mt-12">
