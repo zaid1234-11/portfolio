@@ -11,7 +11,7 @@ import GlobalBackground from "@/components/GlobalBackground";
 
 const Index = () => {
   return (
-    <main className="min-h-screen bg-background overflow-x-hidden relative">
+    <main className="min-h-screen overflow-x-hidden relative">
       <GlobalBackground />
       <Navbar />
       <HeroSection />

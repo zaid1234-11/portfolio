@@ -37,10 +37,7 @@ const services = [
 
 const ServicesSection = () => {
   return (
-    <section id="services" className="relative py-16 sm:py-24 md:py-32 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-card/20 to-background" />
-
+    <section id="services" className="relative py-20 md:py-28 overflow-hidden">
       {/* Ambient Glow with Parallax */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <Parallax offset={100} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">

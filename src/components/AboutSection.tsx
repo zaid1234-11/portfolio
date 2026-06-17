@@ -12,7 +12,7 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="relative py-20 md:py-28 bg-background overflow-hidden"
+      className="relative py-20 md:py-28 overflow-hidden"
     >
       {/* radial glow background with Parallax */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">

@@ -29,7 +29,7 @@ const StatsSection = () => {
     <section className="relative py-12 sm:py-16 md:py-24 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5" />
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
+      <div className="absolute inset-0 pointer-events-none bg-card/5" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">

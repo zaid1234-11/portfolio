@@ -47,7 +47,7 @@ const SkillsSection = () => {
   return (
     <section id="skills" className="relative py-16 sm:py-24 md:py-32 overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-card/30 via-background to-background" />
+      <div className="absolute inset-0 pointer-events-none bg-card/5" />
 
       {/* Grid Pattern */}
       <div

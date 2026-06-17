@@ -66,10 +66,9 @@ const handleSubmit = async (e: React.FormEvent) => {
   return (
     <section
       id="contact"
-      className="relative py-20 md:py-28 overflow-hidden bg-background"
+      className="relative py-20 md:py-28 overflow-hidden"
     >
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/60 to-card/30" />
+      {/* Abstract Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-primary/10 via-transparent to-transparent opacity-40" />
         <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-primary/10 via-transparent to-transparent opacity-40" />

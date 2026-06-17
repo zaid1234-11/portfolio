@@ -26,7 +26,7 @@ const GlobalBackground = () => {
 
   return (
     <motion.div
-      className="fixed inset-x-0 z-[-1] pointer-events-none"
+      className="fixed inset-x-0 z-0 pointer-events-none"
       style={{
         // Oversize the container slightly to hide edges during parallax movement
         top: "-10vh",
