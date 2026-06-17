@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState, useEffect } from "react";
-import Lightfall from "./ui/Lightfall";
+import Silk from "./ui/Silk";
 
 const GlobalBackground = () => {
   const { scrollY } = useScroll();
@@ -35,22 +35,12 @@ const GlobalBackground = () => {
         y,
       }}
     >
-      <Lightfall
-        colors={["#A6C8FF", "#5227FF", "#FF9FFC"]}
-        backgroundColor="#0A29FF"
-        speed={0.3}
-        streakCount={2}
-        streakWidth={0.2}
-        streakLength={3}
-        glow={0.2}
-        density={0.6}
-        twinkle={0.85}
-        zoom={1}
-        backgroundGlow={0}
-        opacity={1}
-        mouseInteraction={true}
-        mouseStrength={0.7}
-        mouseRadius={0.7}
+      <Silk
+        speed={3.1}
+        scale={1.1}
+        color="#bc9876"
+        noiseIntensity={1.6}
+        rotation={0}
       />
     </motion.div>
   );
